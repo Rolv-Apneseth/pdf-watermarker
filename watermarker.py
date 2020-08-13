@@ -1,0 +1,110 @@
+import sys
+import PyPDF2
+import glob
+import os
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+import select_watermark_ui
+import select_pdfs_ui
+
+
+class Watermarker(select_watermark_ui.Ui_watermarkWindow):
+
+    watermark_pdf = None
+    pdfs = []
+    folder = None
+
+    #Functionality
+    def wm_pdf(self, input_pdfs):
+        output = PyPDF2.PdfFileWriter()
+
+        with open(self.watermark_pdf, "rb") as watermark_file:
+            watermark_pdf = PyPDF2.PdfFileReader(watermark_file)
+            watermark_page = watermark_pdf.getPage(0)
+
+            for pdf in input_pdfs:
+                wm_pdf = "".join([pdf[:-4], " (Watermarked).pdf"])
+                with open(pdf, 'rb') as input_file:
+                    input_pdf = PyPDF2.PdfFileReader(input_file)
+
+                    with open(wm_pdf, 'wb') as watermarked_file:
+
+                        for i in range(input_pdf.getNumPages()):
+                            pdf_page = input_pdf.getPage(i)
+                            pdf_page.mergePage(watermark_page)
+                            output.addPage(pdf_page)
+
+                        output.write(watermarked_file)
+
+
+    def choose_file_path(self):
+        path = QtWidgets.QFileDialog.getOpenFileName()
+        return path[0]
+
+
+    #Button Functions
+    def onClicked_pathButton(self):
+        self.lineEdit.setText(self.choose_file_path())
+
+
+    def onClicked_confirmButton(self):
+        self.watermark_pdf = self.lineEdit.text()
+
+        if os.path.exists(self.watermark_pdf) and self.watermark_pdf.endswith(".pdf"):
+            watermarkWindow.close()
+            self.start_pdfs_window()
+
+
+    def onClicked_addButton(self):
+        file = self.choose_file_path()
+        row = self.pdfs_ui.pdfLlistWidget.currentRow()
+
+        if file.endswith(".pdf") and not file == self.watermark_pdf and file not in self.pdfs:
+            self.pdfs_ui.pdfLlistWidget.insertItem(row, file)
+            self.pdfs.append(file)
+
+
+    def onClicked_removeButton(self):
+
+        row = self.pdfs_ui.pdfLlistWidget.currentRow()
+
+        if not self.pdfs_ui.pdfLlistWidget.item(row) == None:
+            file = self.pdfs_ui.pdfLlistWidget.item(row).text()
+            if file in self.pdfs:
+                self.pdfs.remove(file)
+
+        self.pdfs_ui.pdfLlistWidget.takeItem(row)
+
+
+    def onClicked_okButton(self):
+        self.wm_pdf(self.pdfs)
+
+
+    #GUI
+    def start_watermark_window(self):
+        self.pathButton.clicked.connect(self.onClicked_pathButton)
+        self.confirmButton.clicked.connect(self.onClicked_confirmButton)
+
+
+    #Dialogs
+    def start_pdfs_window(self):
+        self.pdfs_window = QtWidgets.QDialog()
+        self.pdfs_ui = select_pdfs_ui.Ui_pdfsDialog()
+        self.pdfs_ui.setupUi(self.pdfs_window)
+        self.pdfs_ui.addButton.clicked.connect(self.onClicked_addButton)
+        self.pdfs_ui.removeButton.clicked.connect(self.onClicked_removeButton)
+        self.pdfs_ui.okButton.clicked.connect(self.onClicked_okButton)
+        self.pdfs_window.show()
+
+# wm_pdf(inputs)
+
+# watermark_file.close()
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    watermarkWindow = QtWidgets.QMainWindow()
+    watermarker = Watermarker()
+    watermarker.setupUi(watermarkWindow)
+    watermarker.start_watermark_window()
+    watermarkWindow.show()
+    sys.exit(app.exec_())

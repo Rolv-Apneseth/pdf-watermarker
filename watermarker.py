@@ -15,15 +15,21 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
     folder = None
 
     #Functionality
-    def wm_pdf(self, input_pdfs):
+    def wm_pdfs(self, input_pdfs, folder, watermark_pdf):
         output = PyPDF2.PdfFileWriter()
 
-        with open(self.watermark_pdf, "rb") as watermark_file:
+        with open(watermark_pdf, "rb") as watermark_file:
             watermark_pdf = PyPDF2.PdfFileReader(watermark_file)
             watermark_page = watermark_pdf.getPage(0)
 
             for pdf in input_pdfs:
-                wm_pdf = "".join([pdf[:-4], " (Watermarked).pdf"])
+                pdf_name = pdf.split("/")[-1]
+
+                if folder:
+                    wm_pdf = "".join([folder, "/", pdf_name[:-4], " (Watermarked).pdf"])
+                else:
+                    wm_pdf = "".join([pdf[:-4], " (Watermarked).pdf"])
+
                 with open(pdf, 'rb') as input_file:
                     input_pdf = PyPDF2.PdfFileReader(input_file)
 
@@ -40,6 +46,11 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
     def choose_file_path(self):
         path = QtWidgets.QFileDialog.getOpenFileName()
         return path[0]
+
+
+    def choose_folder_path(self):
+        path = QtWidgets.QFileDialog.getExistingDirectory()
+        return path
 
 
     #Button Functions
@@ -77,7 +88,14 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
 
 
     def onClicked_okButton(self):
-        self.wm_pdf(self.pdfs)
+        if not self.pdfs == []:
+            self.wm_pdfs(self.pdfs, self.folder, self.watermark_pdf)
+
+
+    def onClicked_folderButton(self):
+        path = self.choose_folder_path()
+        if os.path.isdir(path):
+            self.folder = path
 
 
     #GUI
@@ -94,6 +112,7 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
         self.pdfs_ui.addButton.clicked.connect(self.onClicked_addButton)
         self.pdfs_ui.removeButton.clicked.connect(self.onClicked_removeButton)
         self.pdfs_ui.okButton.clicked.connect(self.onClicked_okButton)
+        self.pdfs_ui.folderButton.clicked.connect(self.onClicked_folderButton)
         self.pdfs_window.show()
 
 # wm_pdf(inputs)

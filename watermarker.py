@@ -75,6 +75,17 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
             self.pdfs.append(file)
 
 
+    def onClicked_addDirectoryButton(self):
+        directory = self.choose_folder_path()
+        row = self.pdfs_ui.pdfLlistWidget.currentRow()
+
+        if os.path.isdir(directory):
+            for file in os.listdir(directory):
+                if file.endswith(".pdf") and not file == self.watermark_pdf and file not in self.pdfs:
+                    self.pdfs_ui.pdfLlistWidget.insertItem(row, directory + file)
+                    self.pdfs.append(file)
+
+
     def onClicked_removeButton(self):
 
         row = self.pdfs_ui.pdfLlistWidget.currentRow()
@@ -113,11 +124,9 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
         self.pdfs_ui.removeButton.clicked.connect(self.onClicked_removeButton)
         self.pdfs_ui.okButton.clicked.connect(self.onClicked_okButton)
         self.pdfs_ui.folderButton.clicked.connect(self.onClicked_folderButton)
+        self.pdfs_ui.addDirectoryButton.clicked.connect(self.onClicked_addDirectoryButton)
         self.pdfs_window.show()
 
-# wm_pdf(inputs)
-
-# watermark_file.close()
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

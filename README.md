@@ -11,3 +11,6 @@ Click the output folder button if you want the watermarked pdfs to go into a dif
 You can add files and remove ones already added from the list, or add all pdf files from a chosen folder.
 
 Hit watermark pdfs to execute the script on the selected pdfs.
+
+The outcome pop up will appear if the script was executed successfully.
+Click ok to end the program.

@@ -6,6 +6,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import select_watermark_ui
 import select_pdfs_ui
+import outcome_ui
 
 
 class Watermarker(select_watermark_ui.Ui_watermarkWindow):
@@ -14,7 +15,7 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
     pdfs = []
     folder = None
 
-    #Functionality
+    #FUNCTIONALITY
     def wm_pdfs(self, input_pdfs, folder, watermark_pdf):
         """Function which carries out the watermarking of all pages of given pdfs file with a watermark pdf"""
 
@@ -40,15 +41,20 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
                 with open(pdf, 'rb') as input_file:
                     input_pdf = PyPDF2.PdfFileReader(input_file)
 
-                    #Third block opens current output file so the watermarked pages can be merged and writen to this file
-                    with open(wm_pdf, 'wb') as watermarked_file:
+                    #Only creates file if file of same name does not already exist, to avoid issues with appending more pages to an existing file
+                    if not os.path.exists(wm_pdf):
+                        #Third block opens current output file so the watermarked pages can be merged and writen to this file
+                        with open(wm_pdf, 'wb') as watermarked_file:
 
-                        for i in range(input_pdf.getNumPages()):
-                            pdf_page = input_pdf.getPage(i)
-                            pdf_page.mergePage(watermark_page)
-                            output.addPage(pdf_page)
+                            for i in range(input_pdf.getNumPages()):
+                                pdf_page = input_pdf.getPage(i)
+                                pdf_page.mergePage(watermark_page)
+                                output.addPage(pdf_page)
 
-                        output.write(watermarked_file)
+                            output.write(watermarked_file)
+                    else:
+                        print(f"Please ensure that the file:\n({pdf})\ndoes not already have a watermarked version in the selected output folder.")
+                        raise FileExistsError
 
 
     def choose_file_path(self):
@@ -65,7 +71,7 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
         return path
 
 
-    #Button Functions
+    #BUTTON FUNCTIONS
     def onClicked_pathButton(self):
         self.lineEdit.setText(self.choose_file_path())
 
@@ -75,7 +81,7 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
 
         #Checks file path given exists and is a pdf file
         if os.path.exists(self.watermark_pdf) and self.watermark_pdf.endswith(".pdf"):
-            watermarkWindow.close()
+            watermarkWindow.hide()
             self.start_pdfs_window()
 
 
@@ -117,6 +123,8 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
         #If files have been selected, calls wm_pdfs function to watermark selected pdfs
         if not self.pdfs == []:
             self.wm_pdfs(self.pdfs, self.folder, self.watermark_pdf)
+            self.pdfs_window.close()
+            self.start_outcome_window()
 
 
     def onClicked_folderButton(self):
@@ -127,7 +135,11 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
             self.folder = path
 
 
-    #GUI
+    def onClicked_exitButton(self):
+        self.outcome_window.close()
+
+
+    #GUI WINDOWS
     def start_watermark_window(self):
         """Window to select pdf file which will be used as a watermark. Note that watermark must be first page of pdf."""
 
@@ -135,7 +147,6 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
         self.confirmButton.clicked.connect(self.onClicked_confirmButton)
 
 
-    #Dialogs
     def start_pdfs_window(self):
         """Window to select pdf files to be watermarked"""
 
@@ -148,6 +159,14 @@ class Watermarker(select_watermark_ui.Ui_watermarkWindow):
         self.pdfs_ui.folderButton.clicked.connect(self.onClicked_folderButton)
         self.pdfs_ui.addDirectoryButton.clicked.connect(self.onClicked_addDirectoryButton)
         self.pdfs_window.show()
+
+
+    def start_outcome_window(self):
+        self.outcome_window = QtWidgets.QDialog()
+        self.outcome_ui = outcome_ui.Ui_outcomeDialog()
+        self.outcome_ui.setupUi(self.outcome_window)
+        self.outcome_ui.exitButton.clicked.connect(self.onClicked_exitButton)
+        self.outcome_window.show()
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-# rolvs-pdf-watermarker
+# pdf-watermarker
 Simple program adds a watermark pdf of choice onto all pages of another pdf
 
 Gui made with pyqt5 designer.

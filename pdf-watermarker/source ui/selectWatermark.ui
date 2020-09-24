@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>watermarkWindow</class>
+ <widget class="QMainWindow" name="watermarkWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>450</width>
+    <height>80</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Select watermark</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>9</x>
+      <y>40</y>
+      <width>281</width>
+      <height>30</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pathButton">
+    <property name="geometry">
+     <rect>
+      <x>295</x>
+      <y>40</y>
+      <width>70</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="text">
+     <string>Choose pdf</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>12</y>
+      <width>431</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+      <underline>true</underline>
+     </font>
+    </property>
+    <property name="text">
+     <string>Choose a watermark file (must be a pdf)</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="confirmButton">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>40</y>
+      <width>70</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Confirm</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

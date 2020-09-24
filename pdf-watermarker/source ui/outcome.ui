@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>outcomeDialog</class>
+ <widget class="QDialog" name="outcomeDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>380</width>
+    <height>60</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Finished</string>
+  </property>
+  <widget class="QLabel" name="outcomeLabel">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>10</y>
+     <width>350</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+     <underline>true</underline>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(244, 255, 246);</string>
+   </property>
+   <property name="text">
+    <string>The selected pdf files have been watermarked successfully!</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="exitButton">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>35</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OK</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

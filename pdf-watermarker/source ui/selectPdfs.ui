@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>pdfsDialog</class>
+ <widget class="QDialog" name="pdfsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>390</width>
+    <height>240</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Select pdfs to be watermarked</string>
+  </property>
+  <widget class="QListWidget" name="pdfLlistWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>370</width>
+     <height>181</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="addButton">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>195</y>
+     <width>55</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="text">
+    <string>Add pdf</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="removeButton">
+   <property name="geometry">
+    <rect>
+     <x>75</x>
+     <y>195</y>
+     <width>75</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="text">
+    <string>Remove pdf</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="okButton">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>215</y>
+     <width>90</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="text">
+    <string>Watermark pdfs</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="folderButton">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>195</y>
+     <width>105</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="text">
+    <string>Select output folder</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="addDirectoryButton">
+   <property name="geometry">
+    <rect>
+     <x>35</x>
+     <y>220</y>
+     <width>100</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="text">
+    <string>Add all from folder</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

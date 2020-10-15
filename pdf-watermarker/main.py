@@ -10,30 +10,31 @@ import assets.outcome_ui
 
 class Watermarker(assets.select_watermark_ui.Ui_watermarkWindow):
 
-    watermark_pdf = None
-    pdfs = []
-    folder = None
+    def __init__(self):
+        self.watermark_pdf = None
+        self.pdfs = []
+        self.folder = None
 
     # FUNCTIONALITY
-    def wm_pdfs(self, input_pdfs, folder, watermark_pdf):
+    def wm_pdfs(self):
         """Function which carries out the watermarking of all pages of given pdfs file with a watermark pdf"""
 
         output = PyPDF2.PdfFileWriter()
 
         # Context managers used instead of open close statements to avoid causing problems by not being able to close opened pdf files
         # First block opens watermark pdf and gets it's first page to use as the watermark for all other pdfs
-        with open(watermark_pdf, "rb") as watermark_file:
-            watermark_pdf = PyPDF2.PdfFileReader(watermark_file)
-            watermark_page = watermark_pdf.getPage(0)
+        with open(self.watermark_pdf, "rb") as watermark_file:
+            self.watermark_pdf = PyPDF2.PdfFileReader(watermark_file)
+            watermark_page = self.watermark_pdf.getPage(0)
 
-            for pdf in input_pdfs:
+            for pdf in self.pdfs:
                 # Done to get just the name of the pdf file and not it's full directory
                 pdf_name = pdf.split("/")[-1]
 
                 # Checks if user specified an output folder, and sets output path accordingly
-                if folder:
+                if self.folder:
                     wm_pdf = "".join(
-                        [folder, "/", pdf_name[:-4], " (Watermarked).pdf"])
+                        [self.folder, "/", pdf_name[:-4], " (Watermarked).pdf"])
                 else:
                     wm_pdf = "".join([pdf[:-4], " (Watermarked).pdf"])
 
@@ -116,8 +117,8 @@ class Watermarker(assets.select_watermark_ui.Ui_watermarkWindow):
 
     def onClicked_okButton(self):
         # If files have been selected, calls wm_pdfs function to watermark selected pdfs
-        if not self.pdfs == []:
-            self.wm_pdfs(self.pdfs, self.folder, self.watermark_pdf)
+        if self.pdfs:
+            self.wm_pdfs()
             self.pdfs_window.close()
             self.start_outcome_window()
 

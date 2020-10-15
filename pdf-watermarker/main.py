@@ -28,15 +28,15 @@ class Watermarker(assets.select_watermark_ui.Ui_watermarkWindow):
             watermark_page = self.watermark_pdf.getPage(0)
 
             for pdf in self.pdfs:
-                # Done to get just the name of the pdf file and not it's full directory
-                pdf_name = pdf.split("/")[-1]
+                # Done to get just the name of the pdf file and not it's full directory or .pdf extension
+                pdf_name = pdf.split("/")[-1][:-4]
 
                 # Checks if user specified an output folder, and sets output path accordingly
                 if self.folder:
-                    wm_pdf = "".join(
-                        [self.folder, "/", pdf_name[:-4], " (Watermarked).pdf"])
+                    wm_pdf = os.path.join(self.folder,
+                                          f"{pdf_name}(Watermarked).pdf")
                 else:
-                    wm_pdf = "".join([pdf[:-4], " (Watermarked).pdf"])
+                    wm_pdf = "".join([pdf, " (Watermarked).pdf"])
 
                 # Second block opens the current pdf in the for loop so it's pages can be watermarked
                 with open(pdf, 'rb') as input_file:
@@ -55,7 +55,7 @@ class Watermarker(assets.select_watermark_ui.Ui_watermarkWindow):
                             output.write(watermarked_file)
                     else:
                         print(
-                            f"Please ensure that the file:\n({pdf})\ndoes not already have a watermarked version in the selected output folder.")
+                            f"Please ensure that the file:\n{pdf}\ndoes not already have a watermarked version in the selected output folder.")
                         raise FileExistsError
 
     def choose_file_path(self):
@@ -87,8 +87,8 @@ class Watermarker(assets.select_watermark_ui.Ui_watermarkWindow):
         file = self.choose_file_path()
         row = self.pdfs_ui.pdfLlistWidget.currentRow()
 
-        # Adds selected pdf file to self.pdfs list if they arepdf files, are not already in self.pdfs and are not the watermark pdf itself
-        if file.endswith(".pdf") and not file == self.watermark_pdf and file not in self.pdfs:
+        # Adds selected pdf file to self.pdfs list if they are pdf files, are not already in self.pdfs
+        if file.endswith(".pdf") and file not in self.pdfs:
             self.pdfs_ui.pdfLlistWidget.insertItem(row, file)
             self.pdfs.append(file)
 
@@ -99,21 +99,22 @@ class Watermarker(assets.select_watermark_ui.Ui_watermarkWindow):
         # Same as previous function but is used to add all pdf files from a chosen directory instead of just a single pdf at a time
         if os.path.isdir(directory):
             for file in os.listdir(directory):
-                if file.endswith(".pdf") and not file == self.watermark_pdf and file not in self.pdfs:
+                if file.endswith(".pdf") and file not in self.pdfs:
                     self.pdfs_ui.pdfLlistWidget.insertItem(
                         row, directory + file)
-                    self.pdfs.append(file)
+                    file_path = os.path.join(directory, file)
+                    self.pdfs.append(file_path)
 
     def onClicked_removeButton(self):
         row = self.pdfs_ui.pdfLlistWidget.currentRow()
 
         # If there is a valid item in the list selected, removes this item from the list and from self.pdfs
-        if not self.pdfs_ui.pdfLlistWidget.item(row) is None:
+        try:
             file = self.pdfs_ui.pdfLlistWidget.item(row).text()
-            if file in self.pdfs:
-                self.pdfs.remove(file)
-
-        self.pdfs_ui.pdfLlistWidget.takeItem(row)
+            self.pdfs_ui.pdfLlistWidget.takeItem(row)
+            self.pdfs.remove(file)
+        except (AttributeError, ValueError):
+            pass
 
     def onClicked_okButton(self):
         # If files have been selected, calls wm_pdfs function to watermark selected pdfs
@@ -132,7 +133,7 @@ class Watermarker(assets.select_watermark_ui.Ui_watermarkWindow):
     def onClicked_exitButton(self):
         self.outcome_window.close()
 
-    # GUI WINDOWS
+    # GUI WINDOWS ------------------------------------------------------------
 
     def start_watermark_window(self):
         """Window to select pdf file which will be used as a watermark. Note that watermark must be first page of pdf."""

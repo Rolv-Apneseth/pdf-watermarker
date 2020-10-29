@@ -1,15 +1,15 @@
-import sys
-import PyPDF2
 import os
+import sys
+
+import PyPDF2
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-import assets.select_watermark_ui
-import assets.select_pdfs_ui
 import assets.outcome_ui
+import assets.select_pdfs_ui
+import assets.select_watermark_ui
 
 
 class Watermarker(assets.select_watermark_ui.Ui_watermarkWindow):
-
     def __init__(self):
         self.watermark_pdf = None
         self.pdfs = []
@@ -33,19 +33,18 @@ class Watermarker(assets.select_watermark_ui.Ui_watermarkWindow):
 
                 # Checks if user specified an output folder, and sets output path accordingly
                 if self.folder:
-                    wm_pdf = os.path.join(self.folder,
-                                          f"{pdf_name}(Watermarked).pdf")
+                    wm_pdf = os.path.join(self.folder, f"{pdf_name}(Watermarked).pdf")
                 else:
                     wm_pdf = "".join([pdf, " (Watermarked).pdf"])
 
                 # Second block opens the current pdf in the for loop so it's pages can be watermarked
-                with open(pdf, 'rb') as input_file:
+                with open(pdf, "rb") as input_file:
                     input_pdf = PyPDF2.PdfFileReader(input_file)
 
                     # Only creates file if file of same name does not already exist, to avoid issues with appending more pages to an existing file
                     if not os.path.exists(wm_pdf):
                         # Third block opens current output file so the watermarked pages can be merged and writen to this file
-                        with open(wm_pdf, 'wb') as watermarked_file:
+                        with open(wm_pdf, "wb") as watermarked_file:
 
                             for i in range(input_pdf.getNumPages()):
                                 pdf_page = input_pdf.getPage(i)
@@ -55,7 +54,8 @@ class Watermarker(assets.select_watermark_ui.Ui_watermarkWindow):
                             output.write(watermarked_file)
                     else:
                         print(
-                            f"Please ensure that the file:\n{pdf}\ndoes not already have a watermarked version in the selected output folder.")
+                            f"Please ensure that the file:\n{pdf}\ndoes not already have a watermarked version in the selected output folder."
+                        )
                         raise FileExistsError
 
     def choose_file_path(self):
@@ -100,8 +100,7 @@ class Watermarker(assets.select_watermark_ui.Ui_watermarkWindow):
         if os.path.isdir(directory):
             for file in os.listdir(directory):
                 if file.endswith(".pdf") and file not in self.pdfs:
-                    self.pdfs_ui.pdfLlistWidget.insertItem(
-                        row, directory + file)
+                    self.pdfs_ui.pdfLlistWidget.insertItem(row, directory + file)
                     file_path = os.path.join(directory, file)
                     self.pdfs.append(file_path)
 
@@ -152,7 +151,8 @@ class Watermarker(assets.select_watermark_ui.Ui_watermarkWindow):
         self.pdfs_ui.okButton.clicked.connect(self.onClicked_okButton)
         self.pdfs_ui.folderButton.clicked.connect(self.onClicked_folderButton)
         self.pdfs_ui.addDirectoryButton.clicked.connect(
-            self.onClicked_addDirectoryButton)
+            self.onClicked_addDirectoryButton
+        )
         self.pdfs_window.show()
 
     def start_outcome_window(self):

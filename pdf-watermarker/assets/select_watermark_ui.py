@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_watermarkWindow(object):
     def setupUi(self, watermarkWindow):
         watermarkWindow.setObjectName("watermarkWindow")
@@ -39,14 +40,19 @@ class Ui_watermarkWindow(object):
 
     def retranslateUi(self, watermarkWindow):
         _translate = QtCore.QCoreApplication.translate
-        watermarkWindow.setWindowTitle(_translate("watermarkWindow", "Select watermark"))
+        watermarkWindow.setWindowTitle(
+            _translate("watermarkWindow", "Select watermark")
+        )
         self.pathButton.setText(_translate("watermarkWindow", "Choose pdf"))
-        self.label.setText(_translate("watermarkWindow", "Choose a watermark file (must be a pdf)"))
+        self.label.setText(
+            _translate("watermarkWindow", "Choose a watermark file (must be a pdf)")
+        )
         self.confirmButton.setText(_translate("watermarkWindow", "Confirm"))
 
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     watermarkWindow = QtWidgets.QMainWindow()
     ui = Ui_watermarkWindow()

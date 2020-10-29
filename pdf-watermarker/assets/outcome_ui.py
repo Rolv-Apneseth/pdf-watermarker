@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_outcomeDialog(object):
     def setupUi(self, outcomeDialog):
         outcomeDialog.setObjectName("outcomeDialog")
@@ -27,12 +28,18 @@ class Ui_outcomeDialog(object):
     def retranslateUi(self, outcomeDialog):
         _translate = QtCore.QCoreApplication.translate
         outcomeDialog.setWindowTitle(_translate("outcomeDialog", "Finished"))
-        self.outcomeLabel.setText(_translate("outcomeDialog", "The selected pdf files have been watermarked successfully!"))
+        self.outcomeLabel.setText(
+            _translate(
+                "outcomeDialog",
+                "The selected pdf files have been watermarked successfully!",
+            )
+        )
         self.exitButton.setText(_translate("outcomeDialog", "OK"))
 
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     outcomeDialog = QtWidgets.QDialog()
     ui = Ui_outcomeDialog()

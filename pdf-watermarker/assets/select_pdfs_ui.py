@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_pdfsDialog(object):
     def setupUi(self, pdfsDialog):
         pdfsDialog.setObjectName("pdfsDialog")
@@ -39,7 +40,9 @@ class Ui_pdfsDialog(object):
 
     def retranslateUi(self, pdfsDialog):
         _translate = QtCore.QCoreApplication.translate
-        pdfsDialog.setWindowTitle(_translate("pdfsDialog", "Select pdfs to be watermarked"))
+        pdfsDialog.setWindowTitle(
+            _translate("pdfsDialog", "Select pdfs to be watermarked")
+        )
         self.addButton.setText(_translate("pdfsDialog", "Add pdf"))
         self.removeButton.setText(_translate("pdfsDialog", "Remove pdf"))
         self.okButton.setText(_translate("pdfsDialog", "Watermark pdfs"))
@@ -49,6 +52,7 @@ class Ui_pdfsDialog(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     pdfsDialog = QtWidgets.QDialog()
     ui = Ui_pdfsDialog()
